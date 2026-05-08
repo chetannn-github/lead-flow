@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+
+main
+auth-app
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries and coverage
+*.test
+*.out
+
+# Dependencies
+vendor/
