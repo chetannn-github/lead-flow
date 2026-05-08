@@ -9,7 +9,7 @@ services:
 
   # Auth Service (Go)
   auth-service:
-    build: ./auth-service
+    build: ../auth-service
     container_name: auth_service
     ports:
       - "8081:8081"
@@ -22,7 +22,7 @@ services:
 
   # Lead Service (Node.js)
   lead-service:
-    build: ./lead-service
+    build: ../lead-service
     container_name: lead_service
     ports:
       - "8082:8082"
@@ -34,7 +34,7 @@ services:
       - mongodb
 
   frontend:
-    build: ./lead-webservice
+    build: ../lead-webservice
     ports:
       - "3000:3000"
     environment:
