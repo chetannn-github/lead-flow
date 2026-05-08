@@ -14,7 +14,7 @@ func main() {
 
 	routes.AuthRoutes(app)
 
-	app.GET("/health", func(c *gin.Context) {
+	app.GET("/api/auth/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "Auth Service is healthy"})
 	})
 
