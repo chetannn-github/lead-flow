@@ -43,5 +43,17 @@ services:
     depends_on:
       - auth-service
       - lead-service
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - frontend
+      - auth-service
+      - lead-service
 volumes:
   mongo_data:
