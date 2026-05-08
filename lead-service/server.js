@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import config from './src/config/env.js';
 import authMiddleware from './src/middleware/auth.js';
+import leadRoutes from './src/routes/lead.route.js'
 import connectDB from './src/config/db.js';
 
 const app = express();
@@ -13,9 +14,11 @@ app.use(cors());
 app.get('/api/leads/health', authMiddleware, (req, res) => {
   res.json({
     message: "Node.js Service Auth success!",
-    userFromGoToken: req.user
+    user: req.user
   });
 });
+
+app.use('/api/leads',authMiddleware, leadRoutes);
 
 app.listen(config.port, async() => {
     await connectDB();
