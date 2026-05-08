@@ -12,6 +12,7 @@ type Config struct {
 	Port      string
 	MongoURI  string
 	JWTSecret string
+	FrontendURL string
 }
 
 func InitConfig() {
@@ -19,6 +20,7 @@ func InitConfig() {
 		Port:      getEnv("PORT", "8081"),
 		MongoURI:  getEnv("MONGO_URI", ""),
 		JWTSecret: getEnv("JWT_SECRET", ""),
+		FrontendURL: getEnv("FRONTEND_URL", "http://localhost:3001"),
 	}
 
 	

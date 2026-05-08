@@ -14,33 +14,38 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Register(res *gin.Context) {
-	var user models.User
+func ContinueAuth(res *gin.Context) {
+	var input models.LoginInput
 
-	if err := res.ShouldBindJSON(&user); err != nil {
+	if err := res.ShouldBindJSON(&input); err != nil {
 		res.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
+			"success": false,
+			"message": "Invalid request body",
 		})
 		return
 	}
 
-	if user.Email == "" {
+	// validations
+	if input.Email == "" {
 		res.JSON(http.StatusBadRequest, gin.H{
-			"error": "Email is required",
+			"success": false,
+			"message": "Email is required",
 		})
 		return
 	}
 
-	if user.Password == "" {
+	if input.Password == "" {
 		res.JSON(http.StatusBadRequest, gin.H{
-			"error": "Password is required",
+			"success": false,
+			"message": "Password is required",
 		})
 		return
 	}
 
-	if len(user.Password) < 6 {
+	if len(input.Password) < 6 {
 		res.JSON(http.StatusBadRequest, gin.H{
-			"error": "Password must be at least 6 characters",
+			"success": false,
+			"message": "Password must be at least 6 characters",
 		})
 		return
 	}
@@ -53,101 +58,117 @@ func Register(res *gin.Context) {
 	)
 	defer cancel()
 
-	// Check Existing User
-	var existingUser models.User
+	// check existing user
+	var user models.User
 
 	err := collection.
-		FindOne(ctx, bson.M{"email": user.Email}).
-		Decode(&existingUser)
+		FindOne(ctx, bson.M{"email": input.Email}).
+		Decode(&user)
 
+	// ====================================
+	// USER EXISTS => LOGIN
+	// ====================================
 	if err == nil {
-		res.JSON(http.StatusConflict, gin.H{
-			"error": "Email already registered",
+
+		// verify password
+		err = bcrypt.CompareHashAndPassword(
+			[]byte(user.Password),
+			[]byte(input.Password),
+		)
+
+		if err != nil {
+			res.JSON(http.StatusUnauthorized, gin.H{
+				"success": false,
+				"message": "Invalid email or password",
+			})
+			return
+		}
+
+		// generate jwt
+		token, err := utils.GenerateToken(
+			user.ID.Hex(),
+			config.AppConfig.JWTSecret,
+		)
+
+		if err != nil {
+			res.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": "Failed to generate token",
+			})
+			return
+		}
+
+		res.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Welcome back 👋 Logged in successfully",
+			"type":    "login",
+			"token":   token,
+			"userId":  user.ID.Hex(),
+			"user": gin.H{
+				"id":    user.ID.Hex(),
+				"email": user.Email,
+			},
 		})
+
 		return
 	}
 
-	// Hash Password
+	// ====================================
+	// USER DOESN'T EXIST => SIGNUP
+	// ====================================
+
 	hashedPassword, err := bcrypt.GenerateFromPassword(
-		[]byte(user.Password),
+		[]byte(input.Password),
 		14,
 	)
 
 	if err != nil {
 		res.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to hash password",
+			"success": false,
+			"message": "Failed to hash password",
 		})
 		return
 	}
 
-	user.Password = string(hashedPassword)
-	user.ID = primitive.NewObjectID()
+	newUser := models.User{
+		ID:       primitive.NewObjectID(),
+		Email:    input.Email,
+		Password: string(hashedPassword),
+	}
 
-	// Save User
-	_, err = collection.InsertOne(ctx, user)
+	_, err = collection.InsertOne(ctx, newUser)
 
 	if err != nil {
 		res.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to create user",
+			"success": false,
+			"message": "Failed to create user",
 		})
 		return
 	}
 
-	// Generate JWT
+	// generate jwt
 	token, err := utils.GenerateToken(
-		user.ID.Hex(),
+		newUser.ID.Hex(),
 		config.AppConfig.JWTSecret,
 	)
 
 	if err != nil {
 		res.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to generate token",
+			"success": false,
+			"message": "Failed to generate token",
 		})
 		return
 	}
 
-	// Success Response
 	res.JSON(http.StatusCreated, gin.H{
-		"message": "User registered successfully",
-		"token":  token,
-		"userId": user.ID.Hex(),
-	})
-}
-
-func Login(res *gin.Context) {
-	var input models.LoginInput
-	if err := res.ShouldBindJSON(&input); err != nil {
-		res.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	collection := config.GetCollection("leadflow_auth", "users")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	var user models.User
-	err := collection.FindOne(ctx, bson.M{"email": input.Email}).Decode(&user)
-	if err != nil {
-		res.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-		return
-	}
-
-	// Verify Password
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
-	if err != nil {
-		res.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-		return
-	}
-
-	// Generate JWT
-	token, err := utils.GenerateToken(user.ID.Hex(), config.AppConfig.JWTSecret)
-	if err != nil {
-		res.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-		return
-	}
-
-	res.JSON(http.StatusOK, gin.H{
-		"token":  token,
-		"userId": user.ID.Hex(),
+		"success": true,
+		"message": "Account created successfully 🎉",
+		"type":    "signup",
+		"token":   token,
+		"userId":  newUser.ID.Hex(),
+		"user": gin.H{
+			"id":    newUser.ID.Hex(),
+			"email": newUser.Email,
+		},
 	})
 }
