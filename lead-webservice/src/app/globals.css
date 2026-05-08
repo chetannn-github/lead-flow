@@ -1,2 +1,152 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+@source "../../src";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --radius-pill: 999px;
+  --radius-squircle: 50px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-surface-pebble: var(--surface-pebble);
+  --color-surface-input: var(--surface-input);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-hairline: var(--hairline);
+
+  --color-status-new: var(--status-new);
+  --color-status-contacted: var(--status-contacted);
+  --color-status-qualified: var(--status-qualified);
+  --color-status-proposal: var(--status-proposal);
+  --color-status-won: var(--status-won);
+  --color-status-lost: var(--status-lost);
+
+  --shadow-recess: var(--shadow-recess);
+  --shadow-recess-focus: var(--shadow-recess-focus);
+  --shadow-pebble: var(--shadow-pebble);
+  --shadow-pebble-hover: var(--shadow-pebble-hover);
+  --shadow-dock: var(--shadow-dock);
+
+  --animate-oil-expand: oil-expand 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-oil-fade: oil-fade 200ms ease-out;
+
+  @keyframes oil-expand {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+      filter: blur(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      filter: blur(0);
+    }
+  }
+  @keyframes oil-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+:root {
+  --radius: 32px;
+
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+
+  --surface-pebble: oklch(0.085 0 0);
+  --surface-input: oklch(0.055 0 0);
+  --surface-elevated: oklch(0.07 0 0);
+  --hairline: oklch(0.22 0 0);
+
+  --card: oklch(0.085 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.07 0 0);
+  --popover-foreground: oklch(1 0 0);
+
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.085 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.085 0 0);
+  --muted-foreground: oklch(0.58 0 0);
+  --accent: oklch(0.1 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.62 0.18 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.22 0 0);
+  --input: oklch(0.22 0 0);
+  --ring: oklch(0.6 0 0);
+
+  /* Status accents — low saturation to sit on black */
+  --status-new: oklch(0.78 0.12 155);
+  --status-contacted: oklch(0.82 0.13 85);
+  --status-qualified: oklch(0.78 0.13 230);
+  --status-proposal: oklch(0.78 0.14 305);
+  --status-won: oklch(0.85 0.14 145);
+  --status-lost: oklch(0.7 0.14 25);
+
+  --shadow-recess: inset 0 2px 8px rgba(255,255,255,0.04), inset 0 -1px 2px rgba(0,0,0,0.6);
+  --shadow-recess-focus: inset 0 0 0 1px rgba(255,255,255,0.10), inset 0 0 24px rgba(255,255,255,0.07);
+  --shadow-pebble: 0 1px 0 rgba(255,255,255,0.03), 0 30px 60px -30px rgba(0,0,0,0.9);
+  --shadow-pebble-hover: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px -20px rgba(255,255,255,0.10);
+  --shadow-dock: 0 20px 60px -10px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+/* Lock dark — Stealth-Luxe is always pitch black */
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: #000;
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  ::selection {
+    background: rgba(255,255,255,0.15);
+  }
+}
+
+/* Organic asymmetric pebble radius — toned down */
+.pebble {
+  border-radius: 28px 24px 26px 30px;
+}
+.pebble-alt {
+  border-radius: 26px 30px 28px 24px;
+}

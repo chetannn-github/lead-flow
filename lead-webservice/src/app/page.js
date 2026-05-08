@@ -1,9 +1,12 @@
-import React from 'react'
+"use client";
 
-function Home() {
+import { Suspense } from "react";
+import Dashboard from "./Dashboard";
+
+export default function Page() {
   return (
-    <div>Home</div>
-  )
+    <Suspense fallback={<div>Loading...</div>}>
+      <Dashboard />
+    </Suspense>
+  );
 }
-
-export default Home

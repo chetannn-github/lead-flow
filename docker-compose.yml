@@ -33,5 +33,15 @@ services:
     depends_on:
       - mongodb
 
+  frontend:
+    build: ./lead-webservice
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_AUTH_SERVICE_URL=http://localhost:8081
+      - NEXT_PUBLIC_LEAD_SERVICE_URL=http://localhost:8082
+    depends_on:
+      - auth-service
+      - lead-service
 volumes:
   mongo_data:
