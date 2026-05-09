@@ -36,13 +36,16 @@ services:
       - mongodb
 
   frontend:
-    build: ../lead-webservice
+    build:
+      context: ../lead-webservice
+      args:
+        NEXT_PUBLIC_AUTH_SERVICE_URL: ${NEXT_PUBLIC_AUTH_SERVICE_URL}
+        NEXT_PUBLIC_LEAD_SERVICE_URL: ${NEXT_PUBLIC_LEAD_SERVICE_URL}
+
     container_name: ${FRONTEND_CONTAINER_NAME}
     ports:
       - "${FRONTEND_PORT}:3000"
     environment:
-      - NEXT_PUBLIC_AUTH_SERVICE_URL=${NEXT_PUBLIC_AUTH_SERVICE_URL}
-      - NEXT_PUBLIC_LEAD_SERVICE_URL=${NEXT_PUBLIC_LEAD_SERVICE_URL}
       - NODE_ENV=${NODE_ENV}
     depends_on:
       - auth-service
