@@ -114,3 +114,15 @@ lead-flow/
 - Dockerized Deployment
 - HTTPS Support
 - Cloud Database
+
+
+# Why Golang + Express for a Simple Project?
+
+This project could have been built using a single backend service, but I wanted to learn and apply microservices architecture in a real-world project.
+
+I used:
+
+Golang for the Auth Service to learn high-performance backend development and JWT-based authentication.
+Node.js + Express for the Lead Service because of its fast development speed and flexibility for CRUD operations.
+
+The main goal was not just building a CRM, but also learning how different backend services communicate and scale independently.
