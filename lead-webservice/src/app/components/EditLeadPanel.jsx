@@ -15,7 +15,7 @@ import {
 
 import { PillTextarea } from "./PillTextArea";
 import { PillButton } from "../../components/PillButton";
-import SCurveTimeline from "./TimeLine";
+import TimeLine from "./TimeLine";
 
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
@@ -166,7 +166,7 @@ export default function EditLeadPanel({ leadId, onClose }) {
       </header>
 
       <div className="px-10 py-4 overflow-y-auto flex-1">
-        <SCurveTimeline
+        <TimeLine
           notes={lead.notes}
         />
       </div>
