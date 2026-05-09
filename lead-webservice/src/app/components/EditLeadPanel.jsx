@@ -72,8 +72,9 @@ export default function EditLeadPanel({ leadId, onClose }) {
 
 
     async function changeStatus(status) {
+       setStatusOpen(false);
       await updateLeadStatus(leadId,status)
-      setStatusOpen(false);
+     
     }
 
     async function handleDeleteLead() {
