@@ -14,7 +14,7 @@ export function PebbleCard({
   onClick,
   alt,
 }) {
-  const lastNote = lead?.notes ? lead.notes[lead.notes?.length-1] : null;
+  const lastNote = lead?.notes ? lead.notes[0] : null;
   return (
     <button
       onClick={onClick}
