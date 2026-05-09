@@ -23,7 +23,7 @@ const FILTERS = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { fetchLeads, leads, todayLeads = []} = useLeadsStore();
+  const { fetchLeads, leads = [], todayLeads = []} = useLeadsStore();
 
 
   const searchParams = useSearchParams();
@@ -202,7 +202,7 @@ export default function DashboardPage() {
           All leads
 
           <span className="ml-2 text-foreground/40">
-            ({leads.length})
+            ({leads?.length})
           </span>
         </h2>
 
