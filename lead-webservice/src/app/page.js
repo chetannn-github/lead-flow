@@ -19,7 +19,7 @@ export default function Page() {
     }
   }, [isCheckingAuth, isAuthenticated]);
 
-  if (isCheckingAuth || !isAuthenticated) {
+  if (isCheckingAuth ) {
     return <Loader/>;
   }
 

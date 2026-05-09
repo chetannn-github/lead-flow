@@ -46,11 +46,9 @@ export const useAuthStore = create((set) => ({
         isCheckingAuth: false,
       });
     } catch (error) {
-      localStorage.removeItem("token");
-
+      console.log(error)
       set({
         user: null,
-        token: null,
         isAuthenticated: false,
         loading: false,
       });

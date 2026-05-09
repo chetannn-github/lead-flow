@@ -1,105 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-import {
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Search } from "lucide-react";
-
-
 import { PebbleCard } from "./PebbleCard";
 import { PillButton } from "./PillButton";
 import LeadOverlay from "./LeadOverlay";
-
-import { isToday } from "../lib/relative-time";
 import { cn, STATUS_LABEL } from "../lib/utils";
+import { useLeadsStore } from "@/store/leadStore";
 
-/* ---------------- DUMMY DATA ---------------- */
-
-const dummyLeads = [
-  {
-    id: "1",
-
-    name: "Sarah Connor",
-
-    company: "Acme Corp",
-
-    phone: "555-0199",
-
-    status: "proposal_sent",
-
-    notes: [
-      {
-        id: "n1",
-
-        body: "Sent pricing PDF.",
-
-        followUpAt:
-          new Date().toISOString(),
-
-        createdAt:
-          new Date().toISOString(),
-      },
-    ],
-  },
-
-  {
-    id: "2",
-
-    name: "Bruce Wayne",
-
-    company: "Wayne Enterprises",
-
-    phone: "555-0007",
-
-    status: "won",
-
-    notes: [
-      {
-        id: "n2",
-
-        body: "Contract signed.",
-
-        followUpAt: null,
-
-        createdAt:
-          new Date().toISOString(),
-      },
-    ],
-  },
-
-  {
-    id: "3",
-
-    name: "Tony Stark",
-
-    company: "Stark Industries",
-
-    phone: "555-1000",
-
-    status: "contacted",
-
-    notes: [
-      {
-        id: "n3",
-
-        body: "Interested in demo.",
-
-        followUpAt: null,
-
-        createdAt:
-          new Date().toISOString(),
-      },
-    ],
-  },
-];
-
-
-
-/* ---------------- FILTERS ---------------- */
 
 const FILTERS = [
   "all",
@@ -113,91 +23,25 @@ const FILTERS = [
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { fetchLeads, leads, todayLeads = []} = useLeadsStore();
 
-  const searchParams =
-    useSearchParams();
 
-  // direct dummy
-  const dashboardLeads =
-    dummyLeads;
+  const searchParams = useSearchParams();
+  const filter = searchParams.get("filter") || "all";
+  const search = searchParams.get("search") || "";
+  const leadId = searchParams.get("lead");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
 
-  const filter =
-    searchParams.get("filter") ||
-    "all";
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-  const q =
-    searchParams.get("q") || "";
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  const leadId =
-    searchParams.get("lead");
 
-  const [dock, setDock] =
-    useState("leads");
-
-  /* ---------------- FOLLOWUPS ---------------- */
-
-  const followUps = useMemo(() => {
-    return dashboardLeads
-      .map((lead) => {
-        const upcoming =
-          lead.notes.find(
-            (note) =>
-              note.followUpAt &&
-              isToday(
-                note.followUpAt
-              )
-          );
-
-        return upcoming
-          ? {
-              lead,
-              followUpAt:
-                upcoming.followUpAt,
-            }
-          : null;
-      })
-      .filter(Boolean);
-  }, [dashboardLeads]);
-
-  /* ---------------- FILTERED ---------------- */
-
-  const filtered = useMemo(() => {
-    const ql =
-      q.trim().toLowerCase();
-
-    return dashboardLeads.filter(
-      (lead) => {
-        if (
-          filter !== "all" &&
-          lead.status !== filter
-        ) {
-          return false;
-        }
-
-        if (!ql) return true;
-
-        return (
-          lead.name
-            .toLowerCase()
-            .includes(ql) ||
-          lead.company
-            .toLowerCase()
-            .includes(ql) ||
-          lead.notes.some((note) =>
-            note.body
-              .toLowerCase()
-              .includes(ql)
-          )
-        );
-      }
-    );
-  }, [dashboardLeads, filter, q]);
-
-  /* ---------------- URL PARAMS ---------------- */
-
-  function updateSearchParams(
-    patch
-  ) {
+  function updateSearchParams(patch) {
     const params =
       new URLSearchParams(
         searchParams.toString()
@@ -229,13 +73,27 @@ export default function DashboardPage() {
     });
   }
 
-  /* ---------------- DOCK ---------------- */
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    fetchLeads(
+      STATUS_LABEL[filter],
+      debouncedSearch
+    );
+  }, [filter, debouncedSearch]);
+
 
   return (
-    <main className="mx-auto max-w-6xl px-6 pb-32 pt-4">
+    <main className="mx-auto max-w-6xl px-3 sm:px-6 pb-32 pt-4 w-[100vw] md:w-[80vw]">
       {/* SEARCH */}
 
-      <div className="relative">
+      <div className="relative w-full">
         <Search
           className="pointer-events-none absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground"
           strokeWidth={1.5}
@@ -243,13 +101,13 @@ export default function DashboardPage() {
 
         <input
           id="dashboard-search"
-          value={q}
+          value={search}
           onChange={(e) =>
             updateSearchParams({
-              q: e.target.value,
+              search: e.target.value,
             })
           }
-          placeholder="Search leads, companies, notes…"
+          placeholder="Search leads, companies."
           className="h-16 w-full rounded-3xl bg-surface-input pl-14 pr-8 text-base text-foreground placeholder:text-muted-foreground/60 outline-none shadow-recess transition-shadow focus:shadow-recess-focus"
         />
 
@@ -304,7 +162,7 @@ export default function DashboardPage() {
 
       {/* FOLLOWUPS */}
 
-      {followUps.length > 0 && (
+      {todayLeads.length > 0 && (
         <section
           id="followups-section"
           className="mt-12"
@@ -314,20 +172,17 @@ export default function DashboardPage() {
           </h2>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
-            {followUps.map(
-              ({
-                lead,
-                followUpAt,
-              }) => (
+            {todayLeads.map(
+              (lead) => (
                 <PebbleCard
-                  key={lead.id}
+                  key={lead._id}
                   lead={lead}
-                  pinned={{
-                    followUpAt,
-                  }}
+                  pinned={
+                   true
+                  }
                   onClick={() =>
                     openLead(
-                      lead.id
+                      lead._id
                     )
                   }
                 />
@@ -347,11 +202,11 @@ export default function DashboardPage() {
           All leads
 
           <span className="ml-2 text-foreground/40">
-            ({filtered.length})
+            ({leads.length})
           </span>
         </h2>
 
-        {filtered.length === 0 ? (
+        {leads.length === 0 ? (
           <div className="pebble bg-surface-pebble p-12 text-center shadow-pebble">
             <p className="text-foreground/80">
               No leads match your
@@ -360,10 +215,10 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map(
+            {leads.map(
               (lead, index) => (
                 <PebbleCard
-                  key={lead.id}
+                  key={lead._id}
                   lead={lead}
                   alt={
                     index % 2 ===
@@ -371,7 +226,7 @@ export default function DashboardPage() {
                   }
                   onClick={() =>
                     openLead(
-                      lead.id
+                      lead._id
                     )
                   }
                 />
@@ -380,8 +235,6 @@ export default function DashboardPage() {
           </div>
         )}
       </section>
-
-     
 
       <LeadOverlay
         open={!!leadId}

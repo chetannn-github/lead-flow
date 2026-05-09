@@ -14,10 +14,7 @@ export function PebbleCard({
   onClick,
   alt,
 }) {
-  const lastNote =
-    lead.notes.find((n) => !n.system) ||
-    lead.notes[0];
-
+  const lastNote = lead?.notes ? lead.notes[lead.notes?.length-1] : null;
   return (
     <button
       onClick={onClick}
@@ -29,7 +26,7 @@ export function PebbleCard({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="text-lg font-semibold tracking-tight text-foreground">
-            {lead.name}{" "}
+            {lead.fullName}{" "}
 
             {lead.company && (
               <span className="font-normal text-muted-foreground">
@@ -48,7 +45,8 @@ export function PebbleCard({
               {lead.phone}
             </p>
           )}
-        </div>
+        </div>  
+        
 
         <StatusPill status={lead.status} />
       </div>
@@ -59,10 +57,10 @@ export function PebbleCard({
             Last note:
           </span>{" "}
 
-          {lastNote.body}
+          {lastNote.description}
 
           <span className="ml-2 text-xs text-muted-foreground/70">
-            {relativeTime(lastNote.createdAt)}
+            {relativeTime(lastNote.date)}
           </span>
         </p>
       )}
@@ -73,7 +71,7 @@ export function PebbleCard({
 
           Follow-up{" "}
           {formatFollowUp(
-            pinned.followUpAt
+            lead.nextFollowUp
           )}
         </div>
       )}

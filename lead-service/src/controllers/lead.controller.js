@@ -63,37 +63,59 @@ export const createLead = async (req, res) => {
 
 export const getLeads = async (req, res) => {
     try {
-        const { search, status, today } = req.query;
-        let query = { userId: req.user.userId };
+        const { search, status } = req.query;
 
-        if (status) query.status = status;
+        let baseQuery = { userId: req.user.userId };
+
+        if (status) baseQuery.status = status;
 
         if (search) {
-            query.$or = [
+            baseQuery.$or = [
                 { fullName: { $regex: search, $options: 'i' } },
                 { company: { $regex: search, $options: 'i' } }
             ];
         }
 
-        if (today === 'true') {
-            const startOfDay = new Date();
-            startOfDay.setHours(0, 0, 0, 0);
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
 
-            const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
 
-            query.nextFollowUp = {
+        const allLeadsRaw = await Lead.find(baseQuery).sort({ createdAt: -1 });
+
+        const allLeads = allLeadsRaw.map((lead) => ({
+            ...lead.toObject(),
+            notes: lead.notes.sort(
+                (a, b) =>
+                new Date(b.date) -
+                new Date(a.date)
+            ),
+        }));
+
+        const todayLeadsRaw = await Lead.find({
+            ...baseQuery,
+            nextFollowUp: {
                 $gte: startOfDay,
                 $lte: endOfDay
-            };
-        }
+            }
+        }).sort({ createdAt: -1 });
 
-        const leads = await Lead.find(query).sort({ createdAt: -1 });
+        const todayLeads = todayLeadsRaw.map((lead) => ({
+            ...lead.toObject(),
+            notes: lead.notes.sort(
+                (a, b) =>
+                new Date(b.date) -
+                new Date(a.date)
+            ),
+        }));
 
         return res.status(200).json({
             success: true,
-            count: leads.length,
-            data: leads
+            count: allLeads.length,
+            todayCount: todayLeads.length,
+            todayLeads,
+            data: allLeads
         });
 
     } catch (error) {
@@ -136,7 +158,7 @@ export const updateLead = async (req, res) => {
         }
 
         const updatedLead = await Lead.findByIdAndUpdate(
-            id,
+            leadId,
             updateQuery,
             { new: true, runValidators: true }
         );
@@ -160,9 +182,9 @@ export const updateLead = async (req, res) => {
 
 export const deleteLead = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { leadId } = req.body;
         const deletedLead = await Lead.findOneAndDelete({ 
-            _id: id, 
+            _id: leadId, 
             userId: req.user.userId 
         });
 
@@ -177,7 +199,7 @@ export const deleteLead = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Lead deleted successfully",
-            deletedId: id
+            deletedId: leadId
         });
 
     } catch (error) {

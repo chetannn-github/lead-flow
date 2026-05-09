@@ -1,24 +1,24 @@
-import { cn, STATUS_LABEL } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 
 
 const colorMap = {
-  new:
+  New:
     "text-status-new bg-[color-mix(in_oklch,var(--status-new)_14%,black)]",
 
-  contacted:
+  Contacted:
     "text-status-contacted bg-[color-mix(in_oklch,var(--status-contacted)_14%,black)]",
 
-  qualified:
+  Qualified:
     "text-status-qualified bg-[color-mix(in_oklch,var(--status-qualified)_14%,black)]",
 
-  proposal_sent:
+  "Proposal Sent":
     "text-status-proposal bg-[color-mix(in_oklch,var(--status-proposal)_14%,black)]",
 
-  won:
+  Won:
     "text-status-won bg-[color-mix(in_oklch,var(--status-won)_16%,black)]",
 
-  lost:
+  Lost:
     "text-status-lost bg-[color-mix(in_oklch,var(--status-lost)_14%,black)]",
 };
 
@@ -34,7 +34,7 @@ export function StatusPill({
         className
       )}
     >
-      {STATUS_LABEL[status]}
+      {status}
     </span>
   );
 }
