@@ -9,6 +9,6 @@ func AuthRoutes(r *gin.Engine) {
 	authGroup := r.Group("/api/auth")
 	{
 		authGroup.POST("/continue", controllers.ContinueAuth)
-		
+		authGroup.GET("/me", controllers.GetMe)
 	}
 }
