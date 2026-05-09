@@ -1,12 +1,4 @@
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: ${MONGO_CONTAINER_NAME}
-    ports:
-      - "${MONGO_PORT}:27017"
-    volumes:
-      - mongo_data:/data/db
-
   # Auth Service (Go)
   auth-service:
     build: ../auth-service
@@ -18,8 +10,7 @@ services:
       - MONGO_URI=${AUTH_MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=${NODE_ENV}
-    depends_on:
-      - mongodb
+    restart: always
 
   # Lead Service (Node.js)
   lead-service:
@@ -32,8 +23,7 @@ services:
       - MONGO_URI=${LEAD_MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=${NODE_ENV}
-    depends_on:
-      - mongodb
+    restart: always
 
   frontend:
     build:
@@ -41,16 +31,9 @@ services:
       args:
         NEXT_PUBLIC_AUTH_SERVICE_URL: ${NEXT_PUBLIC_AUTH_SERVICE_URL}
         NEXT_PUBLIC_LEAD_SERVICE_URL: ${NEXT_PUBLIC_LEAD_SERVICE_URL}
-
     container_name: ${FRONTEND_CONTAINER_NAME}
     ports:
       - "${FRONTEND_PORT}:3000"
     environment:
       - NODE_ENV=${NODE_ENV}
-    depends_on:
-      - auth-service
-      - lead-service
-
-
-volumes:
-  mongo_data:
+    restart: always
