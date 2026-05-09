@@ -177,9 +177,8 @@ export default function DashboardPage() {
                 <PebbleCard
                   key={lead._id}
                   lead={lead}
-                  pinned={
-                   true
-                  }
+                  pinned={true}
+                  searchTerm={search}
                   onClick={() =>
                     openLead(
                       lead._id
@@ -220,6 +219,7 @@ export default function DashboardPage() {
                 <PebbleCard
                   key={lead._id}
                   lead={lead}
+                  searchTerm={search}
                   alt={
                     index % 2 ===
                     1

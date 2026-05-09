@@ -7,12 +7,14 @@ import {
 } from "../../lib/relative-time";
 
 import { cn } from "../../lib/utils";
+import { HighlightText } from "./HighlightText";
 
 export function PebbleCard({
   lead,
   pinned,
   onClick,
   alt,
+  searchTerm
 }) {
   const lastNote = lead?.notes ? lead.notes[0] : null;
   return (
@@ -26,11 +28,17 @@ export function PebbleCard({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="text-lg font-semibold tracking-tight text-foreground">
-            {lead.fullName}{" "}
-
+            <HighlightText
+              text={lead.fullName} 
+              highlight={searchTerm} 
+            />
+         
             {lead.company && (
               <span className="font-normal text-muted-foreground">
-                ({lead.company})
+                <HighlightText
+                  text={` ( ${lead.company} )`} 
+                  highlight={searchTerm} 
+                />
               </span>
             )}
           </h3>
