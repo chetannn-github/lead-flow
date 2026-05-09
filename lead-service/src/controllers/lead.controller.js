@@ -143,20 +143,25 @@ export const updateLead = async (req, res) => {
         }
 
         let updateData = {};
-        if (status) updateData.status = status;
-        if (nextFollowUp) updateData.nextFollowUp = nextFollowUp;
+        let updateQuery = {};
 
-        let updateQuery = { $set: updateData };
-        
+        if (status) updateData.status = status;
         if (newNote && newNote.trim() !== "") {
             updateQuery.$push = { 
                 notes: { 
                     description: newNote, 
-                    date: new Date() 
+                    date: new Date(),
+                    followUpDate: nextFollowUp || null
                 } 
             };
+            if (nextFollowUp) {
+                const newDate = new Date(nextFollowUp);
+                if (!lead.nextFollowUp || newDate < new Date(lead.nextFollowUp)) {
+                    updateData.nextFollowUp = newDate;
+                }
+            }
         }
-
+        updateQuery.$set = updateData;
         const updatedLead = await Lead.findByIdAndUpdate(
             leadId,
             updateQuery,

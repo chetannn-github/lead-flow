@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const noteSchema = new mongoose.Schema({
   description: { type: String, required: true },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  followUpDate: { type: Date, default: null }
 });
 
 const leadSchema = new mongoose.Schema({
