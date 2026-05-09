@@ -162,11 +162,26 @@ export const updateLead = async (req, res) => {
             }
         }
         updateQuery.$set = updateData;
-        const updatedLead = await Lead.findByIdAndUpdate(
-            leadId,
-            updateQuery,
-            { new: true, runValidators: true }
+    
+        const updatedLeadRaw =
+            await Lead.findByIdAndUpdate(
+                leadId,
+                updateQuery,
+                {
+                new: true,
+                runValidators: true,
+                }
         );
+
+        const updatedLead = {
+        ...updatedLeadRaw.toObject(),
+
+        notes: updatedLeadRaw.notes.sort(
+            (a, b) =>
+            new Date(b.date) -
+            new Date(a.date)
+        ),
+        };
 
         return res.status(200).json({
             success: true,

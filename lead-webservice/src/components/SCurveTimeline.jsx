@@ -44,21 +44,28 @@ export default function SCurveTimeline({
               />
             </span>
 
-            <div>
-              <div className="mb-2 flex items-center gap-2">
-                <span className="text-xs font-medium text-white/80">
-                  {formatNoteDate(note.date)}
-                </span>
-
-                <span className="text-[11px] text-white/40">
-                  ({relativeTime(note.date)})
-                </span>
-              </div>
-
-              <div className="rounded-2xl bg-surface-input px-4 py-3 text-sm text-white/90 shadow-recess">
-                {note.description}
-              </div>
+           <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-white/80">
+                {formatNoteDate(note.date)}
+              </span>
+              <span className="text-[11px] text-white/40">
+                ({relativeTime(note.date)})
+              </span>
             </div>
+
+            <div className="rounded-2xl bg-surface-input px-4 py-3 text-sm text-white/90 shadow-recess">
+              {note.description}
+              
+              {note.followUpDate && (
+                <div className="mt-2 flex items-center gap-1.5 border-t border-white/5 pt-2 text-[11px] font-medium text-white/50">
+                  <Bell className="h-3 w-3 text-white/40" />
+                  <span>Next Follow-up:</span>
+                  <span className="text-white/80">{formatFollowUp(note.followUpDate)}</span>
+                </div>
+              )}
+  </div>
+</div>
           </li>
         );
       })}

@@ -59,7 +59,7 @@ export default function EditLeadPanel({ leadId, onClose }) {
     async function handleSaveNotes(e) {
         e.preventDefault();
 
-        if (!body.trim() && !followUpOn) return;
+        if (!body.trim()) return;
 
         await saveNotes(
           leadId, {
