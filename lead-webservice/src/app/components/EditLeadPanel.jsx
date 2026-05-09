@@ -10,6 +10,7 @@ import {
   Trash2,
   Check,
   ChevronDown,
+  Loader2,
 } from "lucide-react";
 
 
@@ -30,11 +31,8 @@ const STATUS_ORDER = [
 ];
 
 
-
-
-
 export default function EditLeadPanel({ leadId, onClose }) {
-    const { leads, updateLeadStatus, saveNotes, deleteLead} = useLeadsStore();
+    const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting, loading} = useLeadsStore();
     function getLead(leadId) {
         return leads.find(
             (lead) => lead._id === leadId
@@ -124,16 +122,12 @@ export default function EditLeadPanel({ leadId, onClose }) {
 
         <div className="flex items-center gap-2">
           <div className="relative">
-            <button
-              onClick={() =>
-                setStatusOpen(
-                  (v) => !v
-                )
-              }
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[12px] font-semibold uppercase tracking-[0.16em]"
+           <button
+              onClick={() => setStatusOpen((v) => !v)}
+              disabled={updatingStatus}
+              className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[12px] font-semibold uppercase tracking-[0.16em] disabled:opacity-50"
             >
-              { lead.status }
-
+              {updatingStatus ? <Loader2 className="h-3 w-3 animate-spin" /> : lead.status}
               <ChevronDown className="h-3.5 w-3.5" />
             </button>
 
@@ -221,20 +215,31 @@ export default function EditLeadPanel({ leadId, onClose }) {
             <button
               type="button"
               onClick={handleDeleteLead}
-              className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm"
+              disabled={loading || isDeleting}
+              className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm hover:bg-white/5 disabled:opacity-50"
             >
-              <Trash2 className="h-4 w-4" />
-
-              Delete
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin text-status-lost" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
+              <span>Delete</span>
             </button>
-
             <PillButton
               type="submit"
               variant="chunky"
               size="lg"
-              className="px-10"
+              className="px-10 min-w-[140px]"
+              disabled={loading || isDeleting}
             >
-              Save note
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Saving...</span>
+                </div>
+              ) : (
+                "Save note"
+              )}
             </PillButton>
           </div>
         </div>

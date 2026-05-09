@@ -11,6 +11,7 @@ export const useLeadsStore = create((set) => ({
   totalCount: 0,
   loading: false,
   isDeleting : false,
+  updatingStatus: false,
   error: null,
 
   fetchLeads: async (status, search) => {
@@ -61,7 +62,7 @@ export const useLeadsStore = create((set) => ({
   },
 
   updateLeadStatus: async (leadId, status) => {
-    set({ loading: true });
+    set({ updatingStatus: true });
     const token = localStorage.getItem("token");
 
     try {
@@ -78,7 +79,7 @@ export const useLeadsStore = create((set) => ({
         todayLeads: state.todayLeads.map((lead) =>
           lead._id === leadId ? updatedLead : lead
         ),
-        loading: false,
+        updatingStatus: false,
         error: null,
       }));
 
@@ -87,7 +88,7 @@ export const useLeadsStore = create((set) => ({
       console.log(err);
       set({
         error: err.response?.data?.message || "Failed to update status",
-        loading: false,
+        updatingStatus: false,
       });
       return { success: false, error: err };
     }

@@ -6,6 +6,7 @@ import { PillInput } from "@/components/PillInput";
 import { PillButton } from "../../components/PillButton";
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
+import { Loader2 } from "lucide-react";
 
 
 export function AddLeadPanel({onClose
@@ -103,9 +104,17 @@ export function AddLeadPanel({onClose
           type="submit"
           variant="chunky"
           size="lg"
-          className="px-12"
+          className="px-12 min-w-[140px]" // min-w taaki size jump na kare
+          disabled={loading} // Saving ke waqt double click block
         >
-          Save lead
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Saving...</span>
+            </div>
+          ) : (
+            "Save lead"
+          )}
         </PillButton>
       </footer>
     </form>
