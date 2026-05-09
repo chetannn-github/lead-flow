@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 import { PillInput } from "@/components/PillInput";
 import { PillButton } from "@/components/PillButton";
-import GoogleSvg from "./components/GoogleSvg";
 import { Loader2 } from "lucide-react";
 
 import { useAuthStore } from "@/store/authStore";
@@ -42,16 +41,7 @@ export default function AuthPage() {
     }
   }
 
-  async function handleGoogleAuth() {
-    try {
-      const googleToken = "sample_google_token";
-      await signInWithGoogle(googleToken);
-
-      router.push("/dashboard");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+ 
  
   useEffect(() => {
     if (!isCheckingAuth && isAuthenticated) {
@@ -112,33 +102,7 @@ export default function AuthPage() {
           </PillButton>
         </form>
 
-        <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-hairline" />
 
-          <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            or
-          </span>
-
-          <div className="h-px flex-1 bg-hairline" />
-        </div>
-
-       <PillButton
-        type="button"
-        variant="outline"
-        size="md"
-        className="w-full"
-        onClick={handleGoogleAuth}
-        disabled={loading}
-      >
-        {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <>
-            <GoogleSvg />
-            <span className="ml-2">Continue with Google</span>
-          </>
-        )}
-      </PillButton>
       </div>
     </main>
   );
