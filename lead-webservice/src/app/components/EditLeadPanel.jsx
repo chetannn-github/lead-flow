@@ -14,8 +14,8 @@ import {
 
 
 import { PillTextarea } from "./PillTextArea";
-import { PillButton } from "./PillButton";
-import SCurveTimeline from "./SCurveTimeline";
+import { PillButton } from "../../components/PillButton";
+import SCurveTimeline from "./TimeLine";
 
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";

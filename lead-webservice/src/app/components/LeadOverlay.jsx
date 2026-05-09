@@ -1,4 +1,4 @@
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 import { AddLeadPanel } from "./AddLeadPanel";
 import EditLeadPanel from "./EditLeadPanel";
 

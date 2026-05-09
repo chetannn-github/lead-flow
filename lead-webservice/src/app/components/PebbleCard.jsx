@@ -4,9 +4,9 @@ import { StatusPill } from "./StatusPill";
 import {
   relativeTime,
   formatFollowUp,
-} from "../lib/relative-time";
+} from "../../lib/relative-time";
 
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 export function PebbleCard({
   lead,

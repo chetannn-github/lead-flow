@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { PillInput } from "./PillInput";
-import { PillButton } from "./PillButton";
+import { PillInput } from "@/components/PillInput";
+import { PillButton } from "../../components/PillButton";
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
 

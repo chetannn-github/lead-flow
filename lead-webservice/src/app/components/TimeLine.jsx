@@ -6,9 +6,9 @@ import {
   formatNoteDate,
   formatFollowUp,
   relativeTime,
-} from "../lib/relative-time";
+} from "../../lib/relative-time";
 
-export default function SCurveTimeline({
+export default function TimeLine({
   notes,
 }) {
   if (!notes?.length) {

@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Search } from "lucide-react";
 import { PebbleCard } from "./PebbleCard";
-import { PillButton } from "./PillButton";
+import { PillButton } from "../../components/PillButton";
 import LeadOverlay from "./LeadOverlay";
-import { cn, STATUS_LABEL } from "../lib/utils";
+import { cn, STATUS_LABEL } from "../../lib/utils";
 import { useLeadsStore } from "@/store/leadStore";
 
 

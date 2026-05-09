@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { PillInput } from "../../components/PillInput";
-import { PillButton } from "../../components/PillButton";
-import GoogleSvg from "../../components/GoogleSvg";
+import { PillInput } from "@/components/PillInput";
+import { PillButton } from "@/components/PillButton";
+import GoogleSvg from "./components/GoogleSvg";
 
 import { useAuthStore } from "@/store/authStore";
 import { Loader } from "@/components/Loader";

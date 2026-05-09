@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "../store/authStore";
-import Dashboard from "../components/Dashboard";
+import Dashboard from "./components/Dashboard";
 import { Loader } from "@/components/Loader";
 
 export default function Page() {
