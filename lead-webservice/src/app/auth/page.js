@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { PillInput } from "@/components/PillInput";
 import { PillButton } from "@/components/PillButton";
 import GoogleSvg from "./components/GoogleSvg";
+import { Loader2 } from "lucide-react";
 
 import { useAuthStore } from "@/store/authStore";
 import { Loader } from "@/components/Loader";
@@ -100,7 +101,14 @@ export default function AuthPage() {
             className="w-full"
             disabled={loading}
           >
-            {loading ? "Please wait..." : "Continue"}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Signing in...</span>
+              </div>
+            ) : (
+              "Continue"
+            )}
           </PillButton>
         </form>
 
@@ -114,17 +122,23 @@ export default function AuthPage() {
           <div className="h-px flex-1 bg-hairline" />
         </div>
 
-        <PillButton
-          type="button"
-          variant="outline"
-          size="md"
-          className="w-full"
-          onClick={handleGoogleAuth}
-          disabled={loading}
-        >
-          <GoogleSvg />
-          Continue with Google
-        </PillButton>
+       <PillButton
+        type="button"
+        variant="outline"
+        size="md"
+        className="w-full"
+        onClick={handleGoogleAuth}
+        disabled={loading}
+      >
+        {loading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <>
+            <GoogleSvg />
+            <span className="ml-2">Continue with Google</span>
+          </>
+        )}
+      </PillButton>
       </div>
     </main>
   );
