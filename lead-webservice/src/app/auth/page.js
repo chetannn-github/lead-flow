@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { PillInput } from "../../components/PillInput";
@@ -16,6 +16,8 @@ export default function AuthPage() {
     authenticateUser,
     signInWithGoogle,
     loading,
+    isCheckingAuth,
+    isAuthenticated,
   } = useAuthStore();
 
   const [email, setEmail] = useState("");
@@ -48,12 +50,23 @@ export default function AuthPage() {
       console.log(error);
     }
   }
+ 
+  useEffect(() => {
+    if (!isCheckingAuth && isAuthenticated) {
+      router.replace("/");
+    }
+  }, [isCheckingAuth, isAuthenticated]);
+
+   
+  if (isCheckingAuth || isAuthenticated) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="min-h-screen w-full bg-background flex items-center justify-center px-6 py-16">
       <div className="w-full max-w-[440px]">
         <h1 className="text-center text-4xl font-bold tracking-tight">
-          LeadFlow
+          LeadFloww
         </h1>
 
         <p className="mt-3 text-center text-sm text-muted-foreground">
