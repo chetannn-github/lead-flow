@@ -88,37 +88,6 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  signInWithGoogle: async (googleToken) => {
-    try {
-      set({ loading: true });
-
-      const data = await api.post(
-        AUTH_BASE_URL,
-        "/auth/google",
-        {
-          token: googleToken,
-        }
-      );
-
-      if (!data?.success) {
-        throw new Error(data?.message || "Google auth failed");
-      }
-
-      localStorage.setItem("token", data.token);
-
-      set({
-        user: data.user,
-        token: data.token,
-        isAuthenticated: true,
-        loading: false,
-      });
-
-      return data;
-    } catch (error) {
-      set({ loading: false });
-      throw error;
-    }
-  },
 
   logout: () => {
     localStorage.removeItem("token");

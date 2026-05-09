@@ -15,7 +15,6 @@ export default function AuthPage() {
 
   const {
     authenticateUser,
-    signInWithGoogle,
     loading,
     isCheckingAuth,
     isAuthenticated,
