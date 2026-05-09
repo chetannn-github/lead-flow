@@ -10,9 +10,9 @@ import {
 import { Search } from "lucide-react";
 
 
-import { PebbleCard } from "../components/PebbleCard";
-import { PillButton } from "../components/PillButton";
-import LeadOverlay from "../components/LeadOverlay";
+import { PebbleCard } from "./PebbleCard";
+import { PillButton } from "./PillButton";
+import LeadOverlay from "./LeadOverlay";
 
 import { isToday } from "../lib/relative-time";
 import { cn, STATUS_LABEL } from "../lib/utils";

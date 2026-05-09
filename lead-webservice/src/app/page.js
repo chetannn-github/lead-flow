@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "../store/authStore";
-import Dashboard from "./Dashboard";
+import Dashboard from "../components/Dashboard";
+import { Loader } from "@/components/Loader";
 
 export default function Page() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function Page() {
   }, [isCheckingAuth, isAuthenticated]);
 
   if (isCheckingAuth || !isAuthenticated) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return <Dashboard />;

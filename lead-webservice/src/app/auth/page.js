@@ -8,6 +8,7 @@ import { PillButton } from "../../components/PillButton";
 import GoogleSvg from "../../components/GoogleSvg";
 
 import { useAuthStore } from "@/store/authStore";
+import { Loader } from "@/components/Loader";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function AuthPage() {
 
    
   if (isCheckingAuth || isAuthenticated) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return (
