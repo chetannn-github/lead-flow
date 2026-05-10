@@ -19,11 +19,9 @@ export default function Page() {
     }
   }, [isCheckingAuth, isAuthenticated]);
 
-  if (isCheckingAuth ) {
+  if (isCheckingAuth || !isAuthenticated) {
     return <Loader/>;
   }
-
-  if(!isAuthenticated) return null;
 
   return <Dashboard />;
 }
