@@ -41,7 +41,7 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  addNewLead: async (leadData) => {
+  addNewLead: async (leadData, filter) => {
     set({ addingNewLead : true });
     const token = localStorage.getItem("token");
 
@@ -49,12 +49,23 @@ export const useLeadsStore = create((set) => ({
       const response = await api.post(LEADS_BASE_URL, "/", leadData, token);
       const newLead = response.data; 
 
-      set((state) => ({
-        leads: [newLead, ...state.leads],
+      
+    set((state) => {
+      const shouldAddToList =
+        !filter ||
+        filter === "all" ||
+        filter === "new";
+
+      return {
+        leads: shouldAddToList
+          ? [newLead, ...state.leads]
+          : state.leads,
+
         totalCount: state.totalCount + 1,
-        addingNewLead : false,
+        addingNewLead: false,
         error: null,
-      }));
+      };
+    });
 
       return { success: true };
     } catch (err) {

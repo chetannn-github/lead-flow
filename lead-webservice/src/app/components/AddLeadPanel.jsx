@@ -9,8 +9,7 @@ import { CloseButton } from "./CloseButton";
 import { Loader2 } from "lucide-react";
 
 
-export function AddLeadPanel({onClose
-}) {
+export function AddLeadPanel({ onClose, filter}) {
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,7 +31,7 @@ export function AddLeadPanel({onClose
       fullName: trimmed,
       company,
       phone,
-    });
+    }, filter);
 
     
     onClose();

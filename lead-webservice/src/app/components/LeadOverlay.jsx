@@ -41,6 +41,7 @@ export default function LeadOverlay({
         {leadId === "new" ? (
           <AddLeadPanel
             onClose={onClose}
+            filter={filter}
           />
         ) : (
           <EditLeadPanel
