@@ -38,7 +38,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
             (lead) => lead._id === leadId
         );
     }
-    const lead = getLead(leadId);
+    const [lead, setLead] = useState(getLead(leadId));
 
     console.log("LEAD", lead)
     const [statusOpen, setStatusOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
         if (!lead) {
             onClose();
         }
-    }, [lead, onClose]);
+    }, [lead]);
 
     if (!lead) return null;
 
