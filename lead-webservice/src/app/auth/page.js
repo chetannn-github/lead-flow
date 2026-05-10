@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { PillInput } from "@/components/PillInput";
 import { PillButton } from "@/components/PillButton";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react"; // Added Eye icons
 
 import { useAuthStore } from "@/store/authStore";
 import { Loader } from "@/components/Loader";
@@ -22,6 +22,7 @@ export default function AuthPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // New state for visibility
 
   async function submit(e) {
     e.preventDefault();
@@ -74,14 +75,30 @@ export default function AuthPage() {
             autoComplete="email"
           />
 
-          <PillInput
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
+          <div className="relative w-full">
+            <PillInput
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              className="pr-12" 
+            />
+            
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              tabIndex={-1} 
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
 
           <PillButton
             type="submit"
