@@ -16,7 +16,7 @@ export function AddLeadPanel({onClose
   const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
 
-  const { addNewLead, loading } = useLeadsStore();
+  const { addNewLead, addingNewLead } = useLeadsStore();
 
   async function submit (e) {
     e.preventDefault();
@@ -105,9 +105,9 @@ export function AddLeadPanel({onClose
           variant="chunky"
           size="lg"
           className="px-12 min-w-[140px]" // min-w taaki size jump na kare
-          disabled={loading} // Saving ke waqt double click block
+          disabled={addingNewLead} // Saving ke waqt double click block
         >
-          {loading ? (
+          {addingNewLead ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               <span>Saving...</span>

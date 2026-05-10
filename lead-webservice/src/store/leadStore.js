@@ -12,6 +12,8 @@ export const useLeadsStore = create((set) => ({
   loading: false,
   isDeleting : false,
   updatingStatus: false,
+  savingNotes: false, 
+  addingNewLead: false,
   error: null,
   overlayId : null,
 
@@ -38,8 +40,9 @@ export const useLeadsStore = create((set) => ({
       });
     }
   },
+
   addNewLead: async (leadData) => {
-    set({ loading: true });
+    set({ addingNewLead : true });
     const token = localStorage.getItem("token");
 
     try {
@@ -49,7 +52,7 @@ export const useLeadsStore = create((set) => ({
       set((state) => ({
         leads: [newLead, ...state.leads],
         totalCount: state.totalCount + 1,
-        loading: false,
+        addingNewLead : false,
         error: null,
       }));
 
@@ -57,84 +60,84 @@ export const useLeadsStore = create((set) => ({
     } catch (err) {
       set({
         error: err.response?.data?.message || "Failed to add lead",
-        loading: false,
+        addingNewLead : false,
       });
       return { success: false, error: err };
     }
   },
 
- updateLeadStatus: async (leadId, status, filter) => {
-  set({ updatingStatus: true });
+  updateLeadStatus: async (leadId, status, filter) => {
+    set({ updatingStatus: true });
 
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  try {
-    const payload = { leadId, status };
+    try {
+      const payload = { leadId, status };
 
-    const response = await api.patch(
-      LEADS_BASE_URL,
-      "/",
-      payload,
-      token
-    );
-
-    const updatedLead = response.data;
-    console.log(filter)
-    set((state) => {
-      let updatedLeads;
-
-      if (filter != "all" && updatedLead.status !== filter) {
-        updatedLeads = state.leads.filter(
-          (lead) => lead._id !== leadId
-        );
-      } else {
-        updatedLeads = state.leads.map((lead) =>
-          lead._id === leadId ? updatedLead : lead
-        );
-      }
-
-
-      const existsInToday = state.todayLeads.some(
-        (lead) => lead._id === leadId
+      const response = await api.patch(
+        LEADS_BASE_URL,
+        "/",
+        payload,
+        token
       );
 
-      let updatedTodayLeads = state.todayLeads;
+      const updatedLead = response.data;
+      console.log(filter)
+      set((state) => {
+        let updatedLeads;
 
-      if (filter != "all" && existsInToday) {
-        updatedTodayLeads = state.todayLeads.filter(
-          (lead) => lead._id !== leadId
+        if (filter != "all" && updatedLead.status !== filter) {
+          updatedLeads = state.leads.filter(
+            (lead) => lead._id !== leadId
+          );
+        } else {
+          updatedLeads = state.leads.map((lead) =>
+            lead._id === leadId ? updatedLead : lead
+          );
+        }
+
+
+        const existsInToday = state.todayLeads.some(
+          (lead) => lead._id === leadId
         );
-      }else {
-        updatedTodayLeads = state.todayLeads.map(
-          (lead) => lead._id === leadId ? updatedLead : lead
-        )
-      }
 
-      return {
-        leads: updatedLeads,
-        todayLeads: updatedTodayLeads,
+        let updatedTodayLeads = state.todayLeads;
+
+        if (filter != "all" && existsInToday) {
+          updatedTodayLeads = state.todayLeads.filter(
+            (lead) => lead._id !== leadId
+          );
+        }else {
+          updatedTodayLeads = state.todayLeads.map(
+            (lead) => lead._id === leadId ? updatedLead : lead
+          )
+        }
+
+        return {
+          leads: updatedLeads,
+          todayLeads: updatedTodayLeads,
+          updatingStatus: false,
+          error: null,
+        };
+      });
+
+      return { success: true };
+    } catch (err) {
+      console.log(err);
+
+      set({
+        error:
+          err.response?.data?.message ||
+          "Failed to update status",
         updatingStatus: false,
-        error: null,
-      };
-    });
+      });
 
-    return { success: true };
-  } catch (err) {
-    console.log(err);
-
-    set({
-      error:
-        err.response?.data?.message ||
-        "Failed to update status",
-      updatingStatus: false,
-    });
-
-    return { success: false, error: err };
-  }
-},
+      return { success: false, error: err };
+    }
+  },
 
   saveNotes: async (leadId, noteData) => {
-    set({ loading: true });
+    set({ savingNotes: true });
     const token = localStorage.getItem("token");
 
     try {
@@ -154,7 +157,7 @@ export const useLeadsStore = create((set) => ({
         todayLeads: state.todayLeads.map((lead) =>
           lead._id === leadId ? updatedLead : lead
         ),
-        loading: false,
+        savingNotes: false,
         error: null,
       }));
 
@@ -162,7 +165,7 @@ export const useLeadsStore = create((set) => ({
     } catch (err) {
       set({
         error: err.response?.data?.message || "Failed to save notes",
-        loading: false,
+        savingNotes: false,
       });
       return { success: false, error: err };
     }

@@ -32,53 +32,47 @@ const STATUS_ORDER = [
 
 
 export default function EditLeadPanel({ leadId, onClose, filter }) {
-    const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting, loading} = useLeadsStore();
-    function getLead(leadId) {
-        return 
-    }
-    const lead = leads.find(
-      (lead) => lead._id === leadId
-    );
+  const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting,savingNotes} = useLeadsStore();
+  const lead = leads.find((lead) => lead._id === leadId);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [body, setBody] = useState("");
+  const [followUpOn, setFollowUpOn] = useState(false);
+  const [followUpAt, setFollowUpAt] = useState("");
+  
+  
+  useEffect(() => {
+      if (!lead) {
+          onClose();
+      }
+  }, [lead, onClose]);
 
-    const [statusOpen, setStatusOpen] = useState(false);
-    const [body, setBody] = useState("");
-    const [followUpOn, setFollowUpOn] = useState(false);
-    const [followUpAt, setFollowUpAt] = useState("");
+  if (!lead) return null;
+
+  async function handleSaveNotes(e) {
+      e.preventDefault();
+
+      if (!body.trim()) return;
+
+      await saveNotes(
+        leadId, {
+          newNote : body ?? null,
+          nextFollowUp : followUpOn ? followUpAt : null
+        } 
+      );
+      setBody("");
+  }
+
+
+  async function changeStatus(status) {
+    setStatusOpen(false);
+    await updateLeadStatus(leadId,status, filter)
     
-    
-    useEffect(() => {
-        if (!lead) {
-            onClose();
-        }
-    }, [lead, onClose]);
+  }
 
-    if (!lead) return null;
-
-    async function handleSaveNotes(e) {
-        e.preventDefault();
-
-        if (!body.trim()) return;
-
-        await saveNotes(
-          leadId, {
-            newNote : body ?? null,
-            nextFollowUp : followUpOn ? followUpAt : null
-          } 
-        );
-        setBody("");
-    }
-
-
-    async function changeStatus(status) {
-      setStatusOpen(false);
-      await updateLeadStatus(leadId,status, filter)
-     
-    }
-
-    async function handleDeleteLead() {
-      await deleteLead(leadId);
-      onClose();
-    }
+  async function handleDeleteLead() {
+    await deleteLead(leadId);
+    onClose();
+  }
 
   return (
     <div className="flex max-h-[88vh] flex-col">
@@ -213,7 +207,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
             <button
               type="button"
               onClick={handleDeleteLead}
-              disabled={loading || isDeleting}
+              disabled={savingNotes || isDeleting}
               className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm hover:bg-white/5 disabled:opacity-50 cursor-pointer"
             >
               {isDeleting ? (
@@ -228,9 +222,9 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
               variant="chunky"
               size="lg"
               className="px-10 min-w-[140px]"
-              disabled={loading || isDeleting}
+              disabled={savingNotes || isDeleting}
             >
-              {loading ? (
+              {savingNotes ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span>Saving...</span>
