@@ -40,6 +40,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
     }
     const lead = getLead(leadId);
 
+    console.log("LEAD", lead)
     const [statusOpen, setStatusOpen] = useState(false);
     const [body, setBody] = useState("");
     const [followUpOn, setFollowUpOn] = useState(false);
