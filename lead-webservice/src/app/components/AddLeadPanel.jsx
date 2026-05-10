@@ -76,11 +76,12 @@ export function AddLeadPanel({ onClose, filter}) {
         <PillInput
           label="Phone"
           value={phone}
-          onChange={(e) =>
-            setPhone(
-              e.target.value
-            )
-          }
+          onChange={(e) => {
+            const val = e.target.value.replace(/\D/g, "");
+            if (val.length <= 10) {
+              setPhone(val);
+            }
+          }}
         />
 
         {error && (
