@@ -16,6 +16,7 @@ export const useLeadsStore = create((set) => ({
 
   fetchLeads: async (status, search) => {
     set({ loading: true });
+    set({leads : [], todayLeads : []})
     const token = localStorage.getItem("token");
     try {
       const response = await api.get(LEADS_BASE_URL,"/", token, {status, search} );
@@ -61,38 +62,75 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  updateLeadStatus: async (leadId, status) => {
-    set({ updatingStatus: true });
-    const token = localStorage.getItem("token");
+ updateLeadStatus: async (leadId, status, filter) => {
+  set({ updatingStatus: true });
 
-    try {
-      const payload = { leadId, status };
-      
-      const response = await api.patch(LEADS_BASE_URL, "/",payload, token);
-      const updatedLead = response.data; 
+  const token = localStorage.getItem("token");
 
-      set((state) => ({
-        leads: state.leads.map((lead) =>
+  try {
+    const payload = { leadId, status };
+
+    const response = await api.patch(
+      LEADS_BASE_URL,
+      "/",
+      payload,
+      token
+    );
+
+    const updatedLead = response.data;
+    console.log(filter)
+    set((state) => {
+      let updatedLeads;
+
+      if (filter != "all" && updatedLead.status !== filter) {
+        updatedLeads = state.leads.filter(
+          (lead) => lead._id !== leadId
+        );
+      } else {
+        updatedLeads = state.leads.map((lead) =>
           lead._id === leadId ? updatedLead : lead
-        ),
-  
-        todayLeads: state.todayLeads.map((lead) =>
-          lead._id === leadId ? updatedLead : lead
-        ),
+        );
+      }
+
+
+      const existsInToday = state.todayLeads.some(
+        (lead) => lead._id === leadId
+      );
+
+      let updatedTodayLeads = state.todayLeads;
+
+      if (filter != "all" && existsInToday) {
+        updatedTodayLeads = state.todayLeads.filter(
+          (lead) => lead._id !== leadId
+        );
+      }else {
+        updatedTodayLeads = state.todayLeads.map(
+          (lead) => lead._id === leadId ? updatedLead : lead
+        )
+      }
+
+      return {
+        leads: updatedLeads,
+        todayLeads: updatedTodayLeads,
         updatingStatus: false,
         error: null,
-      }));
+      };
+    });
 
-      return { success: true };
-    } catch (err) {
-      console.log(err);
-      set({
-        error: err.response?.data?.message || "Failed to update status",
-        updatingStatus: false,
-      });
-      return { success: false, error: err };
-    }
-  },
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+
+    set({
+      error:
+        err.response?.data?.message ||
+        "Failed to update status",
+      updatingStatus: false,
+    });
+
+    return { success: false, error: err };
+  }
+},
 
   saveNotes: async (leadId, noteData) => {
     set({ loading: true });

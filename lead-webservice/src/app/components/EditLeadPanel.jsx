@@ -31,7 +31,7 @@ const STATUS_ORDER = [
 ];
 
 
-export default function EditLeadPanel({ leadId, onClose }) {
+export default function EditLeadPanel({ leadId, onClose, filter }) {
     const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting, loading} = useLeadsStore();
     function getLead(leadId) {
         return leads.find(
@@ -73,7 +73,7 @@ export default function EditLeadPanel({ leadId, onClose }) {
 
     async function changeStatus(status) {
        setStatusOpen(false);
-      await updateLeadStatus(leadId,status)
+      await updateLeadStatus(leadId,status, filter)
      
     }
 

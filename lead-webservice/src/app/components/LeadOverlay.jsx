@@ -6,6 +6,7 @@ export default function LeadOverlay({
   open,
   leadId,
   onClose,
+  filter
 }) {
   
   if (!open) return null;
@@ -45,6 +46,7 @@ export default function LeadOverlay({
           <EditLeadPanel
             leadId={leadId}
             onClose={onClose}
+            filter={filter}
           />
         )}
       </div>
