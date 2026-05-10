@@ -25,19 +25,24 @@ export function formatNoteDate(iso) {
   });
 }
 
-export function formatFollowUp(iso){
+export function formatFollowUp(iso) {
   const d = new Date(iso);
   const today = new Date();
+
   const sameDay =
-    d.getFullYear() === today.getFullYear() &&
-    d.getMonth() === today.getMonth() &&
-    d.getDate() === today.getDate();
+    d.toDateString() === today.toDateString();
+
   const time = d.toLocaleTimeString(undefined, {
     hour: "numeric",
     minute: "2-digit",
   });
+
   if (sameDay) return `today at ${time}`;
-  return `${d.toLocaleDateString(undefined, { month: "short", day: "numeric" })}, ${time}`;
+
+  return `${d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  })}, ${time}`;
 }
 
 export function isToday(iso) {
@@ -60,4 +65,25 @@ export const getTodayMidnight = () => {
   const day = String(now.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}T00:00`;
+};
+
+
+export function toUTCISOString(localDateTime) {
+  if (!localDateTime) return null;
+
+  const date = new Date(localDateTime);
+
+  return date.toISOString();
+}
+
+
+export const isSameLocalDay = (iso) => {
+  const d = new Date(iso);
+  const now = new Date();
+
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
 };

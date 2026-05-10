@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { LEADS_BASE_URL } from '@/config/env';
 import api from '@/lib/api';
 import { STATUS_LABEL } from '@/lib/utils';
+import { isSameLocalDay } from '@/lib/relative-time';
 
 
 
@@ -24,7 +25,22 @@ export const useLeadsStore = create((set,get) => ({
     const token = localStorage.getItem("token");
     try {
       const response = await api.get(LEADS_BASE_URL,"/", token, {status, search} );
-      const { data, todayLeads, todayCount, count } = response;
+      const { data, count } = response;
+
+      const todayLeads = data.filter((lead) =>
+        lead.notes?.some((note) =>
+          isSameLocalDay(note.followUpDate)
+        )
+      );
+
+    set({
+      leads: data,
+      todayLeads,
+      todayCount: todayLeads.length,
+      totalCount: count,
+      loading: false,
+      error: null,
+    });
 
       set({ 
         leads: data, 

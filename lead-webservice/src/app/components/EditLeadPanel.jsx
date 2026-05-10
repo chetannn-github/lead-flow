@@ -20,7 +20,7 @@ import TimeLine from "./TimeLine";
 
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
-import { getTodayMidnight } from "@/lib/relative-time";
+import { getTodayMidnight, toUTCISOString } from "@/lib/relative-time";
 
 const STATUS_ORDER = [
   "New",
@@ -57,7 +57,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
       await saveNotes(
         leadId, {
           newNote : body ?? null,
-          nextFollowUp : followUpOn ? followUpAt : null
+          nextFollowUp : followUpOn ? toUTCISOString(followUpAt) : null
         }, filter
       );
       setBody("");

@@ -93,32 +93,11 @@ export const getLeads = async (req, res) => {
             ),
         }));
 
-        const todayLeadsRaw = await Lead.find({
-            ...baseQuery,
-            notes: {
-                $elemMatch: {
-                    followUpDate: {
-                        $gte: startOfDay,
-                        $lte: endOfDay,
-                    },
-                },
-            },
-        }).sort({ createdAt: -1 });
-
-        const todayLeads = todayLeadsRaw.map((lead) => ({
-            ...lead.toObject(),
-            notes: lead.notes.sort(
-                (a, b) =>
-                new Date(b.date) -
-                new Date(a.date)
-            ),
-        }));
+     
 
         return res.status(200).json({
             success: true,
             count: allLeads.length,
-            todayCount: todayLeads.length,
-            todayLeads,
             data: allLeads
         });
 
