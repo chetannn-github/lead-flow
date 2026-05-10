@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { PebbleCard } from "./PebbleCard";
 import { PillButton } from "../../components/PillButton";
 import LeadOverlay from "./LeadOverlay";
@@ -23,9 +23,7 @@ const FILTERS = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { fetchLeads, leads = [], todayLeads = []} = useLeadsStore();
-
-
+  const { fetchLeads, leads = [], todayLeads = [], loading} = useLeadsStore();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter") || "all";
   const search = searchParams.get("search") || "";
@@ -193,7 +191,11 @@ export default function DashboardPage() {
 
       {/* LEADS */}
 
-      <section
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+        </div>
+      ) :<section
         id="all-leads-section"
         className="mt-12"
       >
@@ -234,11 +236,12 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-      </section>
+      </section>}
 
       <LeadOverlay
         open={!!leadId}
         leadId={leadId}
+        filter={filter}
         onClose={() =>
           updateSearchParams({
             lead: null,
