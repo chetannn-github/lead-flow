@@ -66,6 +66,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
 
   async function changeStatus(status) {
     setStatusOpen(false);
+    if (status === lead.status) return;
     await updateLeadStatus(leadId,status, filter)
     
   }
