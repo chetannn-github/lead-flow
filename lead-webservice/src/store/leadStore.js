@@ -13,6 +13,7 @@ export const useLeadsStore = create((set) => ({
   isDeleting : false,
   updatingStatus: false,
   error: null,
+  overlayId : null,
 
   fetchLeads: async (status, search) => {
     set({ loading: true });

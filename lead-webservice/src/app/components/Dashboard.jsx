@@ -23,11 +23,10 @@ const FILTERS = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { fetchLeads, leads = [], todayLeads = [], loading} = useLeadsStore();
+  const { fetchLeads, leads = [], todayLeads = [], loading, overlayId} = useLeadsStore();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter") || "all";
   const search = searchParams.get("search") || "";
-  const leadId = searchParams.get("lead");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   useEffect(() => {
@@ -66,9 +65,9 @@ export default function DashboardPage() {
   }
 
   function openLead(id) {
-    updateSearchParams({
-      lead: id,
-    });
+    useLeadsStore.setState({
+    overlayId: id,
+  });
   }
 
   useEffect(() => {
@@ -239,12 +238,12 @@ export default function DashboardPage() {
       </section>}
 
       <LeadOverlay
-        open={!!leadId}
-        leadId={leadId}
+        open={!!overlayId}
+        leadId={overlayId}
         filter={filter}
         onClose={() =>
-          updateSearchParams({
-            lead: null,
+          useLeadsStore.setState({
+            overlayId: null,
           })
         }
       />

@@ -34,13 +34,12 @@ const STATUS_ORDER = [
 export default function EditLeadPanel({ leadId, onClose, filter }) {
     const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting, loading} = useLeadsStore();
     function getLead(leadId) {
-        return leads.find(
-            (lead) => lead._id === leadId
-        );
+        return 
     }
-    const [lead, setLead] = useState(getLead(leadId));
+    const lead = leads.find(
+      (lead) => lead._id === leadId
+    );
 
-    console.log("LEAD", lead)
     const [statusOpen, setStatusOpen] = useState(false);
     const [body, setBody] = useState("");
     const [followUpOn, setFollowUpOn] = useState(false);
@@ -51,7 +50,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
         if (!lead) {
             onClose();
         }
-    }, [lead]);
+    }, [lead, onClose]);
 
     if (!lead) return null;
 
@@ -66,21 +65,19 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
             nextFollowUp : followUpOn ? followUpAt : null
           } 
         );
-
-        onClose();
         setBody("");
     }
 
 
     async function changeStatus(status) {
-       setStatusOpen(false);
+      setStatusOpen(false);
       await updateLeadStatus(leadId,status, filter)
      
     }
 
     async function handleDeleteLead() {
-        await deleteLead(leadId);
-        onClose();
+      await deleteLead(leadId);
+      onClose();
     }
 
   return (
@@ -88,7 +85,6 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
       <header className="flex items-start justify-between gap-4 px-10 pt-9 pb-3">
         <div className="min-w-0 flex-1">
             <button
-                
                 className="text-left"
             >
                 <h2 className="text-2xl font-semibold tracking-tight">
