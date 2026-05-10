@@ -30,6 +30,7 @@ Built using Next.js with a modern pill-based UI.
 - Search Text Highlighting
 - Debounced Search
 - Zustand for state management
+- User’s local timezone based UI .
 
 ---
 
