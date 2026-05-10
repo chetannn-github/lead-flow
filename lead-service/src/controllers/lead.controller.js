@@ -95,10 +95,14 @@ export const getLeads = async (req, res) => {
 
         const todayLeadsRaw = await Lead.find({
             ...baseQuery,
-            nextFollowUp: {
-                $gte: startOfDay,
-                $lte: endOfDay
-            }
+            notes: {
+                $elemMatch: {
+                    followUpDate: {
+                        $gte: startOfDay,
+                        $lte: endOfDay,
+                    },
+                },
+            },
         }).sort({ createdAt: -1 });
 
         const todayLeads = todayLeadsRaw.map((lead) => ({
