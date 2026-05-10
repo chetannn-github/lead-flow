@@ -73,16 +73,6 @@ export function PebbleCard({
         </p>
       )}
 
-      {pinned && (
-        <div className="mt-5 inline-flex h-9 items-center gap-2 rounded-full bg-surface-input px-4 text-xs text-foreground/85 shadow-recess">
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-foreground" />
-
-          Follow-up{" "}
-          {formatFollowUp(
-            lead.nextFollowUp
-          )}
-        </div>
-      )}
     </button>
   );
 }
