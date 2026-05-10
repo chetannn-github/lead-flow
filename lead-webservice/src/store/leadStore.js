@@ -81,6 +81,9 @@ export const useLeadsStore = create((set,get) => ({
           : state.leads,
 
         totalCount: state.totalCount + 1,
+        masterLeads : shouldAddToList
+          ? [newLead, ...state.leads]
+          : state.leads,
         addingNewLead: false,
         error: null,
       };
@@ -207,6 +210,9 @@ export const useLeadsStore = create((set,get) => ({
 
       set((state) => ({
         leads: state.leads.filter(
+          (lead) => lead._id !== leadId
+        ),
+        masterLeads : state.masterLeads.filter(
           (lead) => lead._id !== leadId
         ),
 
