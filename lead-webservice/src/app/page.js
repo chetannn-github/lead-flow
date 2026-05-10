@@ -23,5 +23,7 @@ export default function Page() {
     return <Loader/>;
   }
 
+  if(!isAuthenticated) return null;
+
   return <Dashboard />;
 }
