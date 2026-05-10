@@ -4,6 +4,8 @@ LeadFloww is a microservices-based Lead Management System built for managing lea
 
 ---
 
+Test Credentials : admin@example.com password123 
+
 # 🛠️ Tech Stack
 
 - **Frontend:** Next.js, Tailwind CSS, Zustand
