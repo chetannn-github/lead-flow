@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { LEADS_BASE_URL } from '@/config/env';
 import api from '@/lib/api';
+import { STATUS_LABEL } from '@/lib/utils';
 
 
 
-export const useLeadsStore = create((set) => ({
+export const useLeadsStore = create((set,get) => ({
   leads: [],
   todayLeads: [],
   todayCount: 0,
@@ -147,7 +148,7 @@ export const useLeadsStore = create((set) => ({
     }
   },
 
-  saveNotes: async (leadId, noteData) => {
+  saveNotes: async (leadId, noteData, filter) => {
     set({ savingNotes: true });
     const token = localStorage.getItem("token");
 
@@ -157,21 +158,14 @@ export const useLeadsStore = create((set) => ({
         ...noteData
       };
       
-      const response = await api.patch(LEADS_BASE_URL, "/", payload, token);
-      const updatedLead = response.data;
+      await api.patch(LEADS_BASE_URL, "/", payload, token);
+      
+      await get().fetchLeads(STATUS_LABEL[filter]);
 
-      set((state) => ({
-        leads: state.leads.map((lead) =>
-          lead._id === leadId ? updatedLead : lead
-        ),
-        
-        todayLeads: state.todayLeads.map((lead) =>
-          lead._id === leadId ? updatedLead : lead
-        ),
+      set({ 
         savingNotes: false,
         error: null,
-      }));
-
+      });
       return { success: true };
     } catch (err) {
       set({

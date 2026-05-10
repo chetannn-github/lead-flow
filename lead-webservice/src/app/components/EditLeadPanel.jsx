@@ -57,7 +57,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
         leadId, {
           newNote : body ?? null,
           nextFollowUp : followUpOn ? followUpAt : null
-        } 
+        }, filter
       );
       setBody("");
   }
