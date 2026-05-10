@@ -8,6 +8,7 @@ import { isSameLocalDay } from '@/lib/relative-time';
 
 export const useLeadsStore = create((set,get) => ({
   leads: [],
+  masterLeads:[],
   todayLeads: [],
   todayCount: 0,
   totalCount: 0,
@@ -35,6 +36,7 @@ export const useLeadsStore = create((set,get) => ({
 
     set({
       leads: data,
+      masterLeads : data,
       todayLeads,
       todayCount: todayLeads.length,
       totalCount: count,
@@ -98,7 +100,7 @@ export const useLeadsStore = create((set,get) => ({
     set({ updatingStatus: true });
 
     const token = localStorage.getItem("token");
-
+  
     try {
       const payload = { leadId, status };
 
@@ -110,7 +112,7 @@ export const useLeadsStore = create((set,get) => ({
       );
 
       const updatedLead = response.data;
-      console.log(filter)
+  
       set((state) => {
         let updatedLeads;
 
@@ -124,6 +126,9 @@ export const useLeadsStore = create((set,get) => ({
           );
         }
 
+        const updatedMasterLeads = state.masterLeads.map((lead) =>
+            lead._id === leadId ? updatedLead : lead
+        );
 
         const existsInToday = state.todayLeads.some(
           (lead) => lead._id === leadId
@@ -146,6 +151,7 @@ export const useLeadsStore = create((set,get) => ({
           todayLeads: updatedTodayLeads,
           updatingStatus: false,
           error: null,
+          masterLeads : updatedMasterLeads 
         };
       });
 
@@ -159,7 +165,7 @@ export const useLeadsStore = create((set,get) => ({
           "Failed to update status",
         updatingStatus: false,
       });
-
+      
       return { success: false, error: err };
     }
   },

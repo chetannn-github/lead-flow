@@ -33,8 +33,8 @@ const STATUS_ORDER = [
 
 
 export default function EditLeadPanel({ leadId, onClose, filter }) {
-  const { leads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting,savingNotes} = useLeadsStore();
-  const lead = leads.find((lead) => lead._id === leadId);
+  const { masterLeads, updateLeadStatus,updatingStatus, saveNotes, deleteLead, isDeleting,savingNotes} = useLeadsStore();
+  const lead = masterLeads.find((lead) => lead._id === leadId);
   const [statusOpen, setStatusOpen] = useState(false);
   const [body, setBody] = useState("");
   const [followUpOn, setFollowUpOn] = useState(false);
@@ -45,7 +45,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
       if (!lead) {
           onClose();
       }
-  }, [lead, onClose]);
+  }, [ onClose]);
 
   if (!lead) return null;
 
