@@ -41,6 +41,8 @@ export default function AuthPage() {
     if (loading) return; 
     
     try {
+      setEmail(TEST_EMAIL);
+      setPassword(TEST_PASSWORD);
       await authenticateUser({
         email: TEST_EMAIL,
         password: TEST_PASSWORD,   
