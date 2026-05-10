@@ -2,10 +2,10 @@
 
 LeadFloww is a microservices-based Lead Management System built for managing leads efficiently with a clean UI and scalable backend architecture.
 
----
 
-Test Credentials : admin@example.com password123 
 Live Link : https://lead-store.instaconnector.in/
+Test Credentials : admin@example.com password123 
+
 
 ## 📸 Screenshots
 
@@ -16,7 +16,7 @@ Live Link : https://lead-store.instaconnector.in/
 ![Edit Overlay](./lead-webservice/public/screenshots/edit-overlay.png)
 
 ### ➕ Add Lead Overlay
-![Add Lead](./lead-webservice/public/screenshots/add-lead.png)
+![Add Lead](./lead-webservice/public/screenshots/new-overlay.png)
 
 
 
