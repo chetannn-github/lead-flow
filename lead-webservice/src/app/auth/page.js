@@ -10,6 +10,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 
 import { useAuthStore } from "@/store/authStore";
 import { Loader } from "@/components/Loader";
+import { TEST_EMAIL, TEST_PASSWORD } from "@/config/env";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -36,6 +37,20 @@ export default function AuthPage() {
     }
   }
 
+  const handleQuickLogin = async () => {
+    if (loading) return; 
+    
+    try {
+      await authenticateUser({
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD,   
+      });
+      router.push("/");
+    } catch (error) {
+      console.log("Quick login failed", error);
+    }
+  };
+
  
  
   useEffect(() => {
@@ -51,13 +66,18 @@ export default function AuthPage() {
 
  return (
     <main className="h-screen w-full bg-background flex flex-col lg:flex-row overflow-hidden">
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-surface-pebble/30 h-[48vh] lg:h-screen pt-4 lg:pt-0">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-surface-pebble/30 h-[48vh] lg:h-screen pt-4 lg:pt-0 cursor-pointer"
+        onDoubleClick={handleQuickLogin} 
+        onTouchStart={(e) => {
+          if (e.detail === 2) handleQuickLogin();
+        }}
+      >
         <div className="relative w-[92%] h-[90%] lg:h-[70vh] overflow-hidden rounded-[40px] shadow-2xl">
           <Image
             src="/auth.jpg" 
             alt="Auth background"
             fill
-            className="object-cover object-top"
+            className="object-cover object-top select-none"
             priority
           />
         </div>
