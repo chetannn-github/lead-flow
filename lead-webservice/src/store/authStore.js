@@ -13,6 +13,7 @@ export const useAuthStore = create((set) => ({
   loading: false,
   isAuthenticated: false,
   isCheckingAuth: true,
+  loggingOut: false,
 
   checkAuth: async () => {
     try {
@@ -90,13 +91,22 @@ export const useAuthStore = create((set) => ({
   },
 
 
-  logout: () => {
-    localStorage.removeItem("token");
+  logout: async () => {
+    try {
+      set({ loggingOut: true });
+      await new Promise((resolve) =>
+        setTimeout(resolve, 700)
+      );
 
-    set({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-    });
+      localStorage.removeItem("token");
+
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      });
+    } finally {
+      set({ loggingOut: false });
+    }
   },
 }));

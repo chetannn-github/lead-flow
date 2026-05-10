@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Loader2, Search } from "lucide-react";
+import { Loader2, LogOut, LogOutIcon, Search } from "lucide-react";
 import { PebbleCard } from "./PebbleCard";
 import { PillButton } from "../../components/PillButton";
 import LeadOverlay from "./LeadOverlay";
 import { cn, STATUS_LABEL } from "../../lib/utils";
 import { useLeadsStore } from "@/store/leadStore";
+import { useAuthStore } from "@/store/authStore";
 
 
 const FILTERS = [
@@ -24,6 +25,7 @@ const FILTERS = [
 export default function DashboardPage() {
   const router = useRouter();
   const { fetchLeads, leads = [], todayLeads = [], loading, overlayId} = useLeadsStore();
+  const { logout, loggingOut } = useAuthStore();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter") || "all";
   const search = searchParams.get("search") || "";
@@ -85,6 +87,11 @@ export default function DashboardPage() {
     );
   }, [filter, debouncedSearch]);
 
+  async function handleLogout() {
+    await logout();
+    router.replace("/auth");
+  }
+
 
   return (
     <main className="mx-auto max-w-6xl px-3 sm:px-6 pb-32 pt-4 w-[100vw] md:w-[80vw]">
@@ -108,17 +115,27 @@ export default function DashboardPage() {
           className="h-16 w-full rounded-3xl bg-surface-input pl-14 pr-8 text-base text-foreground placeholder:text-muted-foreground/60 outline-none shadow-recess transition-shadow focus:shadow-recess-focus"
         />
 
-        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-3">
           <PillButton
             variant="chunky"
             size="md"
             className="px-6"
-            onClick={() =>
-              openLead("new")
-            }
+            onClick={() => openLead("new")}
           >
             + Add lead
           </PillButton>
+
+          <button
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-pebble shadow-pebble transition-all hover:scale-105 disabled:opacity-60 cursor-pointer"
+          >
+            {loggingOut ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <LogOutIcon className="h-5 w-5" />
+            )}
+          </button>
         </div>
       </div>
 
