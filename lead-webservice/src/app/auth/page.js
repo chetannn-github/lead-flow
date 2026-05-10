@@ -49,10 +49,10 @@ export default function AuthPage() {
     return <Loader/>;
   }
 
-  return (
-    <main className="min-h-screen w-full bg-background flex flex-col lg:flex-row">
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-surface-pebble/30 lg:h-screen pt-4">
-        <div className="relative w-[90%] h-[500px] lg:h-[70vh] overflow-hidden rounded-[40px] shadow-2xl">
+ return (
+    <main className="h-screen w-full bg-background flex flex-col lg:flex-row overflow-hidden">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-surface-pebble/30 h-[48vh] lg:h-screen pt-4 lg:pt-0">
+        <div className="relative w-[92%] h-[90%] lg:h-[70vh] overflow-hidden rounded-[40px] shadow-2xl">
           <Image
             src="/auth.jpg" 
             alt="Auth background"
@@ -63,13 +63,16 @@ export default function AuthPage() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-2 py-12 lg:py-0 bg-background">
+      <div className="w-full lg:w-1/2 flex items-start lg:items-center justify-center px-6 pt-4 pb-2 lg:py-0 bg-background h-[52vh] lg:h-screen">
         <div className="w-full max-w-[400px]">
-          <div className="mb-10">
-            <h1 className="text-center text-4xl font-bold tracking-tight mb-2">LeadFloww</h1>
+          <div className="mb-4 lg:mb-10 text-center lg:text-left">
+            <h1 className="text-3xl lg:text-4xl font-bold tracking-tight mb-1">
+              LeadFloww
+            </h1>
+
           </div>
 
-          <form onSubmit={submit} className="space-y-5">
+          <form onSubmit={submit} className="space-y-3 lg:space-y-5">
             <PillInput
               name="email"
               type="email"
@@ -92,7 +95,7 @@ export default function AuthPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
@@ -100,7 +103,7 @@ export default function AuthPage() {
               type="submit"
               variant="solid"
               size="md"
-              className="w-full h-14 text-lg"
+              className="w-full h-12 lg:h-14 text-lg mt-1"
               disabled={loading}
             >
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Continue"}
