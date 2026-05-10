@@ -38,7 +38,7 @@ export const PillButton = forwardRef(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-full transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
+          "cursor-pointer inline-flex items-center justify-center gap-2 rounded-full transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
           variants[variant],
           sizes[size],
           className

@@ -123,7 +123,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
            <button
               onClick={() => setStatusOpen((v) => !v)}
               disabled={updatingStatus}
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[12px] font-semibold uppercase tracking-[0.16em] disabled:opacity-50"
+              className="cursor-pointer inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[12px] font-semibold uppercase tracking-[0.16em] disabled:opacity-50"
             >
               {updatingStatus ? <Loader2 className="h-3 w-3 animate-spin" /> : lead.status}
               <ChevronDown className="h-3.5 w-3.5" />
@@ -136,7 +136,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
                     <button
                       key={status}
                       onClick={() => changeStatus(status)}
-                      className="flex w-full items-center justify-between rounded-full px-4 py-2 text-sm"
+                      className="cursor-pointer flex w-full items-center justify-between rounded-full px-4 py-2 text-sm"
                     >
                       <span>
                         {status}
@@ -214,7 +214,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
               type="button"
               onClick={handleDeleteLead}
               disabled={loading || isDeleting}
-              className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm hover:bg-white/5 disabled:opacity-50"
+              className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm hover:bg-white/5 disabled:opacity-50 cursor-pointer"
             >
               {isDeleting ? (
                 <Loader2 className="h-4 w-4 animate-spin text-status-lost" />

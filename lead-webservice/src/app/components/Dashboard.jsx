@@ -142,7 +142,7 @@ export default function DashboardPage() {
                 })
               }
               className={cn(
-                "h-10 rounded-full px-5 text-sm transition-all duration-200",
+                "h-10 rounded-full px-5 text-sm transition-all duration-200 cursor-pointer",
 
                 active
                   ? "bg-foreground text-background shadow-[0_8px_24px_-10px_rgba(255,255,255,0.5)]"

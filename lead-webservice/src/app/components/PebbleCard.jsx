@@ -21,7 +21,7 @@ export function PebbleCard({
     <button
       onClick={onClick}
       className={cn(
-        "group relative w-full bg-surface-pebble p-7 text-left shadow-pebble transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-pebble-hover sm:p-8",
+        "cursor-pointer group relative w-full bg-surface-pebble p-7 text-left shadow-pebble transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-pebble-hover sm:p-8",
         alt ? "pebble-alt" : "pebble"
       )}
     >
