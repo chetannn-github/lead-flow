@@ -20,6 +20,7 @@ import TimeLine from "./TimeLine";
 
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
+import { getTodayMidnight } from "@/lib/relative-time";
 
 const STATUS_ORDER = [
   "New",
@@ -178,12 +179,16 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
               checked={
                 followUpOn
               }
-              onChange={(e) =>
-                setFollowUpOn(
-                  e.target
-                    .checked
-                )
-              }
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setFollowUpOn(checked);
+
+                if (checked) {
+                  setFollowUpAt(getTodayMidnight());
+                } else {
+                  setFollowUpAt("");
+                }
+              }}
             />
 
             Set follow-up
