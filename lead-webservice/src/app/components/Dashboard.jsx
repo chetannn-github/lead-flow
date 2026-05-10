@@ -115,14 +115,17 @@ export default function DashboardPage() {
           className="h-16 w-full rounded-3xl bg-surface-input pl-14 pr-8 text-base text-foreground placeholder:text-muted-foreground/60 outline-none shadow-recess transition-shadow focus:shadow-recess-focus"
         />
 
-        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-3">
+        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-2">
           <PillButton
             variant="chunky"
             size="md"
-            className="px-6"
+            className="px-4 min-w-fit max-w-fit sm:px-6" 
             onClick={() => openLead("new")}
           >
-            + Add lead
+            <span>+</span>
+            <span className="hidden [@media(min-width:450px)]:inline ml-1">
+              Add lead
+            </span>
           </PillButton>
 
           <button
