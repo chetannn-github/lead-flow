@@ -20,7 +20,7 @@ import TimeLine from "./TimeLine";
 
 import { useLeadsStore } from "@/store/leadStore";
 import { CloseButton } from "./CloseButton";
-import { getTodayMidnight, toUTCISOString } from "@/lib/relative-time";
+import { getCurrentTime, toUTCISOString } from "@/lib/relative-time";
 
 const STATUS_ORDER = [
   "New",
@@ -79,7 +79,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
   return (
     <div className="flex max-h-[88vh] flex-col ">
       <header className="flex items-start justify-between gap-2 px-2 md:px-10 pt-2 pb-2">
-        <div className="min-w-0 ">
+        <div className="w-[60%]">
             <button
                 className="text-left"
             >
@@ -114,7 +114,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
           
         </div>
 
-        <div className="flex items-center gap-0">
+        <div className="flex items-center gap-0 w-[40%]">
           <div className="relative">
            <button
               onClick={() => setStatusOpen((v) => !v)}
@@ -185,7 +185,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
                 setFollowUpOn(checked);
 
                 if (checked) {
-                  setFollowUpAt(getTodayMidnight());
+                  setFollowUpAt(getCurrentTime());
                 } else {
                   setFollowUpAt("");
                 }
