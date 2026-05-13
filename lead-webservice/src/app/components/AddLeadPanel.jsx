@@ -103,7 +103,7 @@ export function AddLeadPanel({ onClose, filter}) {
         <PillButton
           type="submit"
           variant="chunky"
-          size="lg"
+          size="md"
           className="px-12 min-w-[140px]" // min-w taaki size jump na kare
           disabled={addingNewLead} // Saving ke waqt double click block
         >
