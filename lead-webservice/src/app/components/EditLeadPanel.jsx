@@ -77,13 +77,13 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
   }
 
   return (
-    <div className="flex max-h-[88vh] flex-col">
-      <header className="flex items-start justify-between gap-4 px-10 pt-9 pb-3">
-        <div className="min-w-0 flex-1">
+    <div className="flex max-h-[88vh] flex-col ">
+      <header className="flex items-start justify-between gap-2 px-2 md:px-10 pt-2 pb-2">
+        <div className="min-w-0 ">
             <button
                 className="text-left"
             >
-                <h2 className="text-2xl font-semibold tracking-tight">
+                <h2 className="text-xl font-semibold tracking-tight">
                 {lead.fullName}
 
                 {lead.company && (
@@ -114,12 +114,12 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
           
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0">
           <div className="relative">
            <button
               onClick={() => setStatusOpen((v) => !v)}
               disabled={updatingStatus}
-              className="cursor-pointer inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[12px] font-semibold uppercase tracking-[0.16em] disabled:opacity-50"
+              className="cursor-pointer inline-flex h-10 items-center gap-2 rounded-full bg-surface-input px-4 text-[10px] md:text-[12px] font-semibold uppercase tracking-[0.16em] disabled:opacity-50"
             >
               {updatingStatus ? <Loader2 className="h-3 w-3 animate-spin" /> : lead.status}
               <ChevronDown className="h-3.5 w-3.5" />
@@ -153,7 +153,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
         </div>
       </header>
 
-      <div className="px-10 py-4 overflow-y-auto flex-1">
+      <div className="px-2 md:px-10 py-4 overflow-y-auto flex-1 ">
         <TimeLine
           notes={lead.notes}
         />
@@ -161,7 +161,7 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
 
       <form
         onSubmit={handleSaveNotes}
-        className="border-t border-hairline/60 px-10 py-6 space-y-4 bg-background/40"
+        className="border-t border-hairline/60 px-2 md:px-10 py-1 space-y-4 bg-background/40"
       >
         <PillTextarea
           value={body}
@@ -226,8 +226,8 @@ export default function EditLeadPanel({ leadId, onClose, filter }) {
             <PillButton
               type="submit"
               variant="chunky"
-              size="lg"
-              className="px-10 min-w-[140px]"
+              size="md"
+              className="px-3 min-w-[140px]"
               disabled={savingNotes || isDeleting}
             >
               {savingNotes ? (
